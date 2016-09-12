@@ -1,0 +1,70 @@
+//kuangbin带你飞专题一 搜索 A
+#include<iostream>
+#include<cstring>
+using namespace std;
+char chess[9][9];
+bool row[9];
+bool column[9];
+int cnt;
+void dfs(int n,int k,int hang)
+{
+    if(k==0)
+    {
+        cnt++;
+    }
+    else
+    {
+       for(int j=hang;j<n;j++)
+         for(int i=0;i<n;i++)
+        {
+              hang=j;
+           if(chess[j][i]=='#'&&!row[j]&&!column[i])
+            {
+              chess[j][i]='.';
+              row[j]=column[i]=true;
+              k--;
+              hang++;
+              dfs(n,k,hang);
+              k++;
+              hang--;
+              row[j]=column[i]=false;
+              chess[j][i]='#';
+
+            }
+
+        }
+
+    }
+}
+int main()
+{
+    int n,k;
+    int i,j;
+    int count;
+    while(cin>>n>>k&&(n!=-1&&k!=-1))
+    {
+        count=0;
+        cnt=0;
+        memset(chess,'\0',sizeof(chess));
+        memset(row,false,sizeof(row));
+        memset(column,false,sizeof(column));
+        for(i=0;i<n;i++)
+          for(j=0;j<n;j++)
+        {
+            cin>>chess[i][j];
+            if(chess[i][j]=='#')
+                count++;
+        }
+        if(k>count)
+            cout<<0<<endl;
+        else
+            {
+
+                  dfs(n,k,0);
+
+                cout<<cnt<<endl;
+            }
+
+    }
+    return 0;
+}

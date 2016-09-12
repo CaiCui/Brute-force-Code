@@ -1,0 +1,206 @@
+//kuangbin带你飞专题一 简单搜索 B
+#include<iostream>
+#include<cstring>
+#include<queue>
+using namespace std;
+#define smin 100000000
+struct point{
+ int ceng;
+ int x;
+ int y;
+ char a;
+ int c;
+}grid[27100];
+int dir[4][2]={0,-1,0,1,-1,0,1,0};
+int cnt;
+char p[31][31][31];
+bool tag[31][31][31];
+int main()
+{
+    int L,C,R,i,j,k;
+    int flag;
+    int zmin;
+    int cou;
+    int startx,starty,startz,endx,endy,endz,sno,eno;
+    while(cin>>L>>R>>C)
+    {
+        cou=0;
+        memset(grid,-1,sizeof(grid));
+        memset(p,'\0',sizeof(p));
+        memset(tag,false,sizeof(tag));
+        cnt=0;
+        if(L==0&&R==0&&C==0)
+            break;
+           for(i=0;i<L;i++)
+           {
+            for(j=0;j<R;j++)
+             for(k=0;k<C;k++)
+           {
+               cin>>p[i][j][k];
+               grid[cou].a=p[i][j][k];
+               grid[cou].ceng=i;
+               grid[cou].x=j;
+               grid[cou++].y=k;
+               if(p[i][j][k]=='S')
+               {
+                   startx=i;
+                   starty=j;
+                   startz=k;
+                   sno=cou-1;
+               }
+               if(p[i][j][k]=='E')
+               {
+                   endx=i;
+                   endy=j;
+                   endz=k;
+                   eno=cou-1;
+               }
+
+           }
+
+               //cout<<endl;没有这个。。。。。
+           }
+         queue<point>q;
+         while(!q.empty())
+            q.pop();
+         if(startx>endx)
+         {
+             p[endx][endy][endz]='S';
+             p[startx][starty][startz]='E';
+              grid[eno].c=0;
+              grid[eno].a='S';
+              grid[sno].a='E';
+             q.push(grid[eno]);
+
+         }
+         else
+         {
+
+             grid[sno].c=0;
+             q.push(grid[sno]);
+         }
+
+
+
+         int first,last;
+         first=0;
+         last=0;
+         flag=0;
+         zmin=smin;
+
+         while(first<=last&&!q.empty()&&!flag)
+         {
+               point temp;
+               temp=q.front();
+               q.pop();
+               first++;
+               int xx,yy;
+               int tempx,tempy,tempceng;
+               if(temp.a=='E')
+               {
+                   flag=1;
+                   if(cnt<zmin)
+                    zmin=cnt;
+                   break;
+               }
+               else
+               {
+                 xx=tempx=temp.x;
+                 yy=tempy=temp.y;
+                 tempceng=temp.ceng;
+                 //本层搜索
+                 for(int m=0;m<4;m++)
+                   {
+                       xx=xx+dir[m][0];
+                       yy=yy+dir[m][1];
+                       if(xx>=0&&xx<R&&yy>=0&&yy<C)
+                       {
+                          if(p[tempceng][xx][yy]=='E')
+                          {
+                           cnt=temp.c+1;
+                           flag=1;
+                           if(cnt<zmin)
+                           zmin=cnt;
+                           break;
+                          }
+                          else if(p[tempceng][xx][yy]=='.'&&tag[tempceng][xx][yy]==false)
+                          {
+                          tag[tempceng][xx][yy]=true;
+                          point next;
+                          next.ceng=tempceng;
+                          next.x=xx;
+                          next.y=yy;
+                          next.a=p[tempceng][xx][yy];
+                          next.c=temp.c+1;
+                          q.push(next);
+                          last++;
+                          }
+                       }
+                        xx=tempx;
+                        yy=tempy;
+                   }
+                //向上搜索一层
+                  if(p[tempceng+1][xx][yy]=='E')
+                    {
+                           cnt=temp.c+1;
+                           flag=1;
+                           if(cnt<zmin)
+                           zmin=cnt;
+                           break;
+
+                    }
+                  else if(p[tempceng+1][tempx][tempy]=='.'&&tag[tempceng+1][tempx][tempy]==false)
+                   {
+                          tag[tempceng+1][tempx][tempy]=true;
+                          point next;
+                          next.ceng=tempceng+1;
+                          next.x=tempx;
+                          next.y=tempy;
+                          next.a=p[tempceng+1][tempx][tempy];
+                          next.c=temp.c+1;
+                          q.push(next);
+                          last++;
+                   }
+               //向下搜索一层
+               if(tempceng-1>=0)
+               {
+                    if(p[tempceng-1][xx][yy]=='E')
+                    {
+                           cnt=temp.c+1;
+                           flag=1;
+                           if(cnt<zmin)
+                           zmin=cnt;
+                           break;
+
+                    }
+                  else if(p[tempceng-1][tempx][tempy]=='.'&&tag[tempceng-1][tempx][tempy]==false)
+                   {
+                          tag[tempceng-1][tempx][tempy]=true;
+                          point next;
+                          next.ceng=tempceng-1;
+                          next.x=tempx;
+                          next.y=tempy;
+                          next.a=p[tempceng-1][tempx][tempy];
+                          next.c=temp.c+1;
+                          q.push(next);
+                          last++;
+                   }
+               }
+
+
+               }
+
+         }
+
+         if(flag)
+         {
+           cout<<"Escaped in "<<zmin<<" minute(s)."<<endl;
+         }
+         else
+         {
+             cout<<"Trapped!"<<endl;
+         }
+
+    }
+    return 0;
+}
