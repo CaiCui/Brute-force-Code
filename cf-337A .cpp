@@ -1,8 +1,8 @@
 /**
   *Problem 337A - Puzzles
-  *Ö±½Ó±©Á¦³¬Ê±,¶øÇÒ×¢ÒâdfsµÄÊ±ºòÇ§Íò²»ÒªÔÚÖ´ĞĞ¹ı³ÌÖĞ¶ÔÓÃµ½µÄÊı×éÅÅĞò,Éñtm¿Ó...ºóÀ´²Å·¢ÏÖÅÅĞòÔì³ÉÁË½á¹û´íÎó
-  *¸ÄÓÃ¶¯Ì¬¹æ»®....Éñtm dp.maxx=min(maxx,a[i+n]-a[i]);.....ÆäÊµÊÇ¸öÌ°ĞÄ+ÅÅĞò£¬¿ÓËÀÁË¡£¡£¡£
-  *²ËµÄ¿Û½Å°¡T_T,²»¹ı¿ÉÒÔ¿¼ÂÇÏÂ¶¯Ì¬¹æ»®ÔõÃ´½â£¬¿Ï¶¨Ã»ÕâÖÖ·½·¨¿ì¡£
+  *ç›´æ¥æš´åŠ›è¶…æ—¶,è€Œä¸”æ³¨æ„dfsçš„æ—¶å€™åƒä¸‡ä¸è¦åœ¨æ‰§è¡Œè¿‡ç¨‹ä¸­å¯¹ç”¨åˆ°çš„æ•°ç»„æ’åº,ç¥tmå‘...åæ¥æ‰å‘ç°æ’åºé€ æˆäº†ç»“æœé”™è¯¯
+  *æ”¹ç”¨åŠ¨æ€è§„åˆ’....ç¥tm dp.maxx=min(maxx,a[i+n]-a[i]);.....å…¶å®æ˜¯ä¸ªè´ªå¿ƒ+æ’åºï¼Œå‘æ­»äº†ã€‚ã€‚ã€‚
+  *èœçš„æ‰£è„šå•ŠT_T,ä¸è¿‡å¯ä»¥è€ƒè™‘ä¸‹åŠ¨æ€è§„åˆ’æ€ä¹ˆè§£ï¼Œè‚¯å®šæ²¡è¿™ç§æ–¹æ³•å¿«ã€‚
   */
 #include<bits/stdc++.h>
 using namespace std;
@@ -25,3 +25,79 @@ int main()
     cout<<minnum<<endl;
     return 0;
 }
+
+
+/*TLE
+#include<bits/stdc++.h>
+using namespace std;
+#define MIN 1000000
+#define MAX -1000000
+int b[60],n,m;
+int flag[60];
+int minnum;
+int fff=0;
+bool cmp(int a,int b)
+ {
+     return a>b?1:0;
+ }
+void solve(int k,int start,int c[])
+{
+
+    if(k==n&&!fff)
+    {
+        int j;
+        int tmpmin,tmpmax;
+        tmpmin=MIN;
+        tmpmax=MAX;
+        //sort(c,c+n,cmp);
+    
+        for(j=0;j<n;j++)
+        {
+            if(c[j]<tmpmin)
+                tmpmin=c[j];
+            if(c[j]>tmpmax)
+                tmpmax=c[j];
+        }
+
+        if(tmpmax-tmpmin<minnum)
+            minnum=tmpmax-tmpmin;
+        if(minnum==0)
+            fff=1;
+
+
+    }
+    else
+    {
+        if(!fff)
+        {
+              int i;
+        for(i=start;i<m;i++)
+            if(!flag[i])
+                {
+                    flag[i]=1;
+                    c[k]=b[i];
+                    solve(k+1,i+1,c);
+                    c[k]=0;
+                    flag[i]=0;
+                }
+        }
+
+    }
+}
+int main()
+{
+    int c[60];
+   cin>>n>>m;
+   memset(flag,0,sizeof(flag));
+   memset(c,0,sizeof(c));
+   for(int i=0;i<m;i++)
+    cin>>b[i];
+    sort(b,b+n,cmp);
+   minnum=MIN;
+   solve(0,0,c);
+   cout<<minnum<<endl;
+}
+
+*/
+
+
